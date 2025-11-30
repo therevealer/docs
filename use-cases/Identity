@@ -1,0 +1,11 @@
+---
+title: 'Identity & Compliance'
+description: 'Text, title, and styling in standard markdown'
+icon: 'text-size'
+---
+
+Identity verification and regulatory compliance are two of the most demanding areas in digital infrastructure.
+Existing approaches depend heavily on centralized intermediaries that store sensitive personal data, creating significant risks of privacy leakage,
+data breaches, and regulatory inefficiency. zkPass, through its zkTLS protocol, offers a cryptographically verifiable yet privacy-preserving alternative.
+By enabling individuals to prove compliance attributes directly from authoritative Web2 sources,
+zkPass allows institutions and applications to validate what matters while ensuring that raw data never leaves the user’s control.
