@@ -24,12 +24,42 @@
           },
 
           {
-            "group": "Developer Guides",
-            "pages": [
-              "JS SDK",
-              "Intract Quest"
-            ]
-          },
+  "group": "Developer Guides",
+  "pages": [
+    
+    {
+      "group": "JS-SDK",
+      "pages": [
+        "developer-guides/js-sdk/how-it-works",
+        "developer-guides/js-sdk/quick-start",
+        
+        {
+          "group": "Generate proof",
+          "pages": [
+            "developer-guides/proof/evm",
+            "developer-guides/proof/solana",
+            "developer-guides/proof/ton"
+          ]
+        },
+        
+        {
+          "group": "Schema",
+          "pages": [
+            "developer-guides/schema/overview",
+            "developer-guides/schema/custom-schema",
+            "developer-guides/schema/quickstart"
+          ]
+        },
+        
+        "developer-guides/js-sdk/api-references",
+        "developer-guides/js-sdk/error-handling",
+        "developer-guides/js-sdk/references"
+                
+        ]
+      },
+        "developer-guides/intract"
+    ]
+  },
 
           {
             "group": "ZK Pass DAO",
