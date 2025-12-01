@@ -1,0 +1,137 @@
+---
+title: "Technical Overview"
+description: "Introducing the Hybrid mode of the zkTLS oracle protocol"
+---
+
+## v2.0
+
+This document describes the zkPass oracle protocol from a technical perspective. It presents the underlying cryptographic components and specifies the building blocks used to construct the zkPass protocol.
+
+The zkPass protocol is meticulously designed to serve as a private data oracle, leveraging Vector Oblivious Linear Evaluation (VOLE) to create efficient commitments, commonly referred to as VOLE-Based Zero-Knowledge Proofs (VOLE-ZK). Specifically, beyond the use of SoftSpokenOT for Oblivious Transfer (OT), the security integrity of the zkPass protocol is intimately tied to the robustness of the VOLE-in-the-Head (VOLEitH) technique.
+
+zkPass operates in a Hybrid Mode, which combines Proxy Mode and MPC Mode, allowing the protocol to adapt to various network conditions and server restrictions without compromising performance or security. This design ensures flexibility in data-sharing scenarios, whether a server supports direct client requests or has stricter security policies.
+
+## **Overview**
+
+While Transport Layer Security (TLS) provides secure access to private data, it doesn't allow users to prove to third parties that the data genuinely came from a specific website. Existing solutions either require unwanted trust assumptions or server modifications, effectively locking users' data at its source. The zkPass protocol addresses this issue by extending TLS into a Three-party TLS (3P-TLS) to prevent cheating and protect privacy, enabling secure data sharing without needing assistance or permission from the data holder.
+
+The zkPass protocol involves three entities: the Prover (**P**), the Verifier (**V**), and the DataSource (TLS Server as **S**). Departing from conventional methods, **P **utilizes their access token to directly pinpoint and extract their data from **S**. **P **then generates a Zero-Knowledge Proof (ZKP) for the **V**'s inspection. This procedure ensures that **V** remains oblivious to the **P**'s personal data.
+
+To actualize this architecture, we integrate**3P-TLS, MPC** , and **Non-Interactive Zero Knowledge (NIZK)** technologies.
+
+We have designed and implemented the zkPass protocol in two modes:
+
+1. **Proxy Mode**: In this mode, **P **communicates with **S **through **V **as a proxy.
+2. **MPC Mode**: In this mode, both **P **and **V **act as a client to communicates with **S**.
+
+These two modes collectively form **Hybrid Mode**, providing zkPass with the flexibility to operate efficiently across various scenarios. Typically, the zkPass protocol operates efficiently in Proxy Mode. However, a small number of TLS servers do not support this mode, meaning they block the same account's requests originating from different IP addresses. In such cases, our protocol switches to operate in MPC Mode.
+
+## **Proxy Mode**
+
+In Proxy Mode, we propose having **V **act as a proxy between **P **and **S**. In this setup, **P **communicates with **S **through **V**, which allows **V **to record the traffic for later verification. The modified protocol flow is designed to maintain security while improving efficiency.
+
+### **Flow and Security Properties**
+
+The protocol flow is as follows:
+
+1. Three-Party Handshake: **P**, **V**, and **S **engage in a 3P-TLS handshake. This handshake establishes cryptographic parameters and ensures mutual authentication among the parties.
+2. Prover's Key Share Commitment: After the handshake, **P **commits to her key share Kp_Kp_​. This commitment prevents **P **from altering her key share later in the protocol. **P **must commit to her key share Kp_Kp_​​ before learning the complete session key K_K_. This commitment binds **P **to her key share, ensuring she cannot manipulate the session to produce fraudulent proofs later on.
+3. Verifier Reveals Key Share: **V **reveals his key share Kv_Kv_​ ​ to **P**. With both key shares, **P** computes the full session key K=Kp+Kv_K_=_Kp_​+_Kv_​.
+4. Session Continuation: **P** uses the session key K_K_ to continue the TLS session with **S**. **V**, acting as a proxy, records all traffic between **P **and **S**.
+5. Proof Generation: After the session concludes, **P **proves statements about the recorded session to **V.**
+
+To verify server identity, during the three-party handshake, **V **can verify **S**'s identity by checking the server's signature over a fresh nonce, as per standard TLS procedures. Verifier integrity and privacy are maintained because, under the assumption that TLS is secure, a malicious **V **cannot compromise the integrity and privacy of the TLS session between **P** and **S**. Ensuring Prover integrity requires certain network assumptions. **V **must maintain a reliable connection to **S **throughout the session and ensure that the **P **cannot tamper with the messages exchanged between **V **and **S **such as those executed through BGP hijacking. Since attacks like BGP are difficult to execute in practice and are already mitigated by ICP and CSP, these network assumptions are generally acceptable and can be considered negligible in practical scenarios.
+
+The Proxy Mode in the zkPass protocol enhances efficiency and performance by simplifying the communication flow and eliminating the need for intensive cryptographic computations after the handshake phase. Since no complex cryptographic operations are required during the rest of the session, the protocol becomes faster and more efficient due to the reduced cryptographic workload. While this approach is more universal, it introduces an additional trust assumption for the proxy and requires not only a ZK solution that’s affordable for the client, but also special magic tricks to bypass the data source’s WAF.
+
+### **VOLEitH Protocol**
+
+VOLEitH is the most suitable and client affordable ZKP Protocol for authorizing TLS. We have implemented the protocol using SoftSpokenOT[ROY22], VOLE-ZK[YSWW21] and Fiat-Shamir transform[FS87].
+
+#### **VOLE**
+
+In order to construct the zkPass protocol, we introduce the VOLEitH to create an interactive argument system. This system is then made non-interactive using the Fiat-Shamir transform and its security is proven within the Random Oracle Model (ROM). zkPass uses VOLE correlations over a finite field F2k_F_2_k_​ , to use as a form of linearly homomorphic commitment scheme. A VOLE correlation of length is defined by a random global key Δ∈F2kΔ∈_F_2_k_​ , a set of random bits ui∈F2k_ui_​∈_F_2_k_​, random VOLE tags vi∈F2k_vi_​∈_F_2_k_​ and VOLE keys qi∈F2k_qi_​∈_F_2_k_​ such that:
+
+qi=ui∗Δ+vifor i=0,...,ℓ−1._qi_​=_ui_​∗Δ+_vi_​_for_ _i_=0,...,ℓ−1.
+
+The values ui_ui_​ and vi_vi_​ should be known only to **P**, while qi_qi_​ and ∆∆ should be given to **V**. A VOLE correlation can be seen as committing **P **to the random bits ui_ui_​ via a linearly homomorphic commitment scheme. The scheme is hiding, because the random vi_vi_​ mask ui_ui_​ in the **V**'s values qi_qi_​, and the scheme is binding, because opening to a different value ui′_ui_′​ requires **P **to come up with a tag qi′=ui′∗Δ+vi′_qi_′​=_ui_′​∗Δ+_vi_′​ but then **P **would have successfully guessed ∆=(vi′−vi)/(ui′−ui)∆=(_vi_′​−_vi_​)/(_ui_′​−_ui_​), which can only happen with probability 2−k2−_k_.
+
+A VOLE correlation can be created with a secure two-party protocol, in zkPass protocol, however, since we want to obtain ZKP that are publicly verifiable, we instead use the VOLEitH technique [BBD+23]. Here, **P **first generates its values ui_ui_​ , vi_vi_​ and commits to them using a special type of VOLE commitment. The commitment is set up such that **V **can later send to **P **the random key ∆∆, after which, **P **can send an opening that allows **V **to learn its qi_qi_​ values, such that equation holds for ∆∆, and nothing more. It is important that ∆∆ is only given to **P **after running the main steps of the ZKP, since as soon as ∆∆ is known, the binding property of the homomorphic commitments is trivially broken.
+
+#### **VOLEitH Commitment**
+
+The main building block of our VOLEitH approach is the technique of committing to a vector of N pseudo-random seeds by deriving them from a tree of length-doubling PRGs. This is also known as the GGM construction, which builds a puncturable PRF from a PRG [GGM84, KPTZ13,BW13, BGI14]. We model this as an all-but-one vector commitment scheme, where **P **commits to N seeds by sending a single hash value, and can later open N − 1 of them with only O(logN)_O_(_logN_) communication. To open all-but-one of the seeds, say all except index sdj_sdj_​ , **P **takes the siblings of all nodes on the path from the root to leaf j_j_ (excluding the root node) and sends these to **V**, together with the commitment comj_comj_​ . **V **can then reconstruct every sdi_sdi_​ for i≠j_i_=_j_ using the sibling nodes, and also has enough information to compute the hash value h_h_ and check the original commitment.
+
+Then we start converting vector commitments to VOLE, to obtain our desired VOLE commitments, **P **starts by committing to τ all-but-one vector commitments. After send the vector commitments, the next step is to convert each vector commitment into a length-l_l_, small-field VOLE correlation in F2k_F_2_k_​ , This involves first expanding each of the seeds sd0,...,sdN−1_sd_0​,...,_sdN_−1​ (committed in the vector commitment) using a PRG, to obtain N_N_ strings r0,...,rN−1∈{0,1}l_r_0​,...,_rN_−1​∈{0,1}_l_, and then computing in F2k_F_2_k_​:
+
+u=∑i=0N−1ri,v=∑i=0N−1i∗ri_u_=_i_=0∑_N_−1​_ri_​,_v_=_i_=0∑_N_−1​_i_∗_ri_​
+
+where i_i_ is encoded as an element of F2k_F_2_k_​.
+
+To see how this can be used to get a VOLE correlation, consider a**V**  who later learns seeds sdi_sdi_​ for all i≠j_i_=_j_, for some index j∈0,...,N−1_j_∈0,...,_N_−1 (viewed as an F2k_F_2_k_​ element). **V** can compute:
+
+q=∑i=0N−1(j−i)∗ri=j∗∗u−v_q_=_i_=0∑_N_−1​(_j_−_i_)∗_ri_​=_j_∗∗_u_−_v_
+
+After doing this for each of the vector commitments, **P **has l_l_ small and independent VOLE correlations. Denote these as ui_ui_​，Vi_Vi_​ for i=0,...,τ−1_i_=0,...,_τ_−1, where we now view Vi_Vi_​ as a matrix in {0,1}l∗k{0,1}_l_∗_k_ , instead of a vector in F2k_F_2_k_​ . **V** will eventually learn (Δi,QiΔ_i_​,_Qi_​) such that:
+
+Qi=Vi+(δ0∗ui...δk−1∗ui)_Qi_​=_Vi_​+(_δ_0​∗_ui_​..._δk_−1​∗_ui_​)
+
+where δ0,...,δk−1_δ_0​,...,_δk_−1​ is the bit decomposition of ∆∆.
+
+After this **P **must send correction values so that the VOLEs can be fixed to use the same u_u_ value. Finally we make a VOLE Consistency Check to ensure that all u_u_ values are corrected in right ways.
+
+#### **VOLEitH Proof System**
+
+The VOLE-ZK is an interactive ZKP in the VOLE-hybrid model. It is based on the Line-Point Zero-Knowledge Paradigm[DIO21]. For the zkPass protocol, we use the QuickSilver protocol to prove boolean circuits satisfaction. As QuickSilver is an interactive proof system, it is described here as a protocol executed between two parties: **P **and **V**. And we will convert it into the NIZK eventually.
+
+We have VOLE Commitments at last step, **P **first get χi_χi_​ from Fiat-Shamir transformation and then **P **calculates the ∑ui∑_ui_​ ∗ χi_χi_​ and ∑vi∑_vi_​ ∗ χi_χi_​ for all the inputs and gates in circuit, and later get ΔΔ from Fiat-Shamir then open all the vector commits and ∑ui∑_ui_​ ∗ χi_χi_​ , ∑vi∑_vi_​ ∗ χi_χi_​ , to **V**, **V** reconstructs the GGM Trees to obtain VOLE instances and calculate ∑qi∑_qi_​ ∗ χi_χi_​ then check:
+
+∑qi∗χi=∑ui∗χi∗Δ+∑vi∗χi∑_qi_​∗_χi_​=∑_ui_​∗_χi_​∗Δ+∑_vi_​∗_χi_​
+
+If the equation equal then circuit satisfied.
+
+At this point, we have successfully completed all protocol implementations.
+
+### **Why VOLEitH**
+
+ZK systems like SNARKs are less suitable for authorizing TLS data because they involve intensive cryptographic computations, such as large-scale exponentiations and complex pairing operations. These operations require substantial computational resources and memory, leading to time-consuming proof generation that is often unaffordable for clients. Additionally, SNARKs typically require a trusted setup phase, which introduces potential security risks. While they may be acceptable for very small data sizes, they are inefficient and impractical for the typical data sizes found in TLS communications.
+
+In contrast, VOLE-ZKs are much more efficient. They naturally handle the linear computations, enabling fast and low-overhead, which makes them more suitable for authorizing TLS data. They avoid the need for a trusted setup and do not require large memory or extensive calculations for proof generation, making them affordable for clients. However, VOLE-ZK proofs are interactive, necessitating the verifier's continuous online presence and potentially introducing risks of collusion.
+
+To overcome these challenges, the zkPass protocol employs the VOLEitH technique, transforming the VOLE-ZK protocol into a non-interactive form. This ensures swift and efficient proof generation directly in the browser and device, addressing the limitations of both traditional SNARKs and VOLE-ZKs. By doing so, zkPass combines the efficiency of VOLE-ZK proofs with the convenience of non-interactivity, making it a practical and secure solution for authorizing TLS data.
+
+## **MPC Mode**
+
+In MPC Mode, we have implemented the protocol using a hybrid approach that combines ZKP and MPC technologies for 3P-TLS.
+
+**P **and **V **work together as a single client to establish secure communication with **S**. They achieve this through a series of stages based on the elliptic curve Diffie-Hellman (ECDH) protocol, enhanced with MPC and OT techniques.
+
+### **Three-Party Handshake**
+
+The first stage of the protocol is a three-party handshake between **P**, **V**, and **S**, where they work together to generate the pre-master key. **P **and **V **each receive a share of this key using Oblivious Linear Evaluation (OLE) based Multiplicative-to-Additive (MtA) or Additive-to-Multiplicative (AtM) schemes, which support additive homomorphism. The pre-master key is divided, with **P **and **V **each getting one half, while **S **retains the full key.
+
+To ensure authenticity and prevent the client from impersonating fake websites, after the client and server exchange greetings, the server provides its certificate. During the key exchange phase, the server also signs the public key with its private key from the certificate. This allows **V**, within the client, to verify the certificate and signature, confirming the server's identity and establishing trust in the data source.
+
+The second stage of the protocol is key derivation, where **P **and **V **work together using Garbled Circuit (GC) to generate two session keys from the pre-master key: the encryption key (enc_key) for data protection and the message authentication code key (mac_key) for data integrity. Notably, **V **only holds a share of the mac_key and has no access to the enc_key, ensuring that **V **cannot view **P**’s private information. **P **also holds a share of the mac_key, giving access to identity-related data but without the ability to tamper with it. Any tampering can be detected by verifying the authenticity of messages using the mac_key.
+
+The MPC algorithm in zkPass has been significantly optimized in several areas, including communication time, hash functions for the Garbler and Evaluator, OT operations, and memory copying. These improvements have increased efficiency by more than threefold. A new AES128 proof method has also been introduced, reducing the number of blocks by 300 times and speeding up Garbler/Evaluator execution by tenfold. zkPass uses Silent OT, minimizing offline network communication during OT generation. For GC, zkPass implements Three Halves Make a Whole and Stacked GC, which reduces the size of the Garbled Tables, leading to less communication and faster execution. Overall, these optimizations have greatly reduced the runtime of the entire MPC process, making zkPass much more efficient.
+
+### **ZKP**
+
+In the final stage of the zkPass protocol, the client creates a ZKP for public verification. After the 3P-TLS phase, the prover obtains the complete data and uses the VOLEitH process to generate a proof. Since this step is similar to the process used in proxy mode, we won’t go into the details here.
+
+### **Why Not Prioritize MPC Mode**
+
+The performance overhead of MPC Mode is significant, mainly due to the truth table (TT) in GC. Every block of application data must be encrypted using a TT, which greatly increases both computational and bandwidth requirements. For a single TLS session, there's a fixed cost of 20MB, plus 8MB per 1KB of outgoing data and 32KB per 1KB of incoming data. For a typical 1KB request and 100KB response, the prover would need to upload around 32MB, making this approach impractical for regular use.
+
+Additionally, MPC Mode isn't necessarily more secure than Proxy Mode because it still relies on a "trusted notary", similar to a proxy. A malicious notary could cache session data and collude with a compromised client. Since the server's decrypted key is hidden for privacy, external verification is impossible, meaning collusion or manipulation could go unnoticed. While MPC mode reduces some trust assumptions, it doesn't fully eliminate them, so it isn't inherently more secure.
+
+Given these issues, while MPC Mode provides some cryptographic advantages and may be useful for small requests, its high performance overhead and limited security benefits make it no better than a well-designed and decentralized proxy. Its resource demands and impracticality for everyday use restrict its real-world application. Therefore, we only reserve this mode as a backup for TLS servers that block requests from the same account when coming from different IP addresses.
+
+## **Summary**
+
+The zkPass protocol distinguishes itself by combining advanced cryptographic techniques to achieve secure, efficient, and privacy-preserving data sharing. By extending TLS into a three-party protocol and integrating VOLEitH for Non-Interactive Zero-Knowledge (NIZK) proofs, zkPass effectively addresses both security and performance challenges.
+
+Its **Hybrid Mode**, which seamlessly switches between **Proxy Mode** and **MPC Mode**, allows the protocol to adapt to various network environments and server policies without compromising efficiency or security. Proxy Mode ensures high performance with minimal cryptographic overhead, while MPC Mode takes over when certain servers block requests from multiple IP addresses, maintaining privacy and security. The use of VOLEitH further enhances efficiency by avoiding the heavy computational and memory demands of traditional cryptographic systems like SNARKs.
+
+Optimized cryptographic computations and communication flows make zkPass highly scalable, ensuring that the protocol remains practical for real-world applications without sacrificing security or speed.
