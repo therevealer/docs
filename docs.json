@@ -30,6 +30,7 @@
     {
       "group": "JS-SDK",
       "pages": [
+        "developer-guides/js-sdk/overview",
         "developer-guides/js-sdk/how-it-works",
         "developer-guides/js-sdk/quick-start",
         
