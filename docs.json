@@ -65,10 +65,6 @@
           {
             "group": "ZK Pass DAO",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets",
               "VAAP",
               "ZKP"
             ]
@@ -77,10 +73,6 @@
           {
             "group": "Support",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets",
               "FAQ",
               "Roadmap",
               "Terms & Conditions",
