@@ -65,18 +65,18 @@
           {
             "group": "ZK Pass DAO",
             "pages": [
-              "VAAP",
-              "ZKP"
+              "essentials/vaap",
+              "essentials/zkp"
             ]
           },
 
           {
             "group": "Support",
             "pages": [
-              "FAQ",
-              "Roadmap",
-              "Terms & Conditions",
-              "Privacy Policy"
+              "essentials/faq",
+              "esentials/roadmap",
+              "essentials/terms-conditions",
+              "essentials/privacy-policy"
             ]
           }
           
