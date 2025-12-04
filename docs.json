@@ -90,7 +90,15 @@
             "group": "Use Cases",
             "pages": [
               "use-cases/introduction",
-              "use-cases/identity"
+              "use-cases/identity",
+              "use-cases/finance",
+              "use-cases/reputation",
+              "use-cases/industries",
+              "use-cases/ai-data",
+              "use-cases/dePin",
+              "use-cases/supply-chain",
+              "use-cases/government",
+              "use-cases/content"
             ]
           },
           {
