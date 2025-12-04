@@ -1,11 +1,11 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "maple",
-  "name": "Mintt Starter Kit",
+  "theme": "mint",
+  "name": "zkPass",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#07C983",
+    "light": "#D4FF0A", 
+    "dark": "#A8D800"
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -30,6 +30,7 @@
     {
       "group": "JS-SDK",
       "pages": [
+        "developer-guides/js-sdk/overview",
         "developer-guides/js-sdk/how-it-works",
         "developer-guides/js-sdk/quick-start",
         
@@ -51,7 +52,7 @@
           ]
         },
         
-        "developer-guides/js-sdk/api-references",
+        "developer-guides/js-sdk/API-References",
         "developer-guides/js-sdk/error-handling",
         "developer-guides/js-sdk/references"
                 
@@ -64,26 +65,18 @@
           {
             "group": "ZK Pass DAO",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets",
-              "VAAP",
-              "ZKP"
+              "essentials/vaap",
+              "essentials/zkp"
             ]
           },
 
           {
             "group": "Support",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets",
-              "FAQ",
-              "Roadmap",
-              "Terms & Conditions",
-              "Privacy Policy"
+              "essentials/faq",
+              "essentials/roadmap",
+              "essentials/terms-conditions",
+              "essentials/privacy-policy"
             ]
           }
           
@@ -97,7 +90,15 @@
             "group": "Use Cases",
             "pages": [
               "use-cases/introduction",
-              "use-cases/Identity"
+              "use-cases/identity",
+              "use-cases/finance",
+              "use-cases/reputation",
+              "use-cases/industries",
+              "use-cases/ai-data",
+              "use-cases/dePin",
+              "use-cases/supply-chain",
+              "use-cases/government",
+              "use-cases/content"
             ]
           },
           {
@@ -113,14 +114,14 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "Community",
+          "href": "https://discord.com/invite/zkpass",
+          "icon": "discord"
         },
         {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "Portal",
+          "href": "https://portal.zkpass.org/",
+          "icon": "rocket"
         }
       ]
     }
@@ -135,30 +136,21 @@
         "label": "Support",
         "href": "mailto:hi@mintlify.com"
       }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
-    }
+    ]
   },
   "contextual": {
     "options": [
      "copy",
      "view",
      "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
+     "claude"
    ]
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "x": "https://twitter.com/zkPass",
+      "github": "https://github.com/zkPassOfficial",
+      "website": "https://zkpass.org/"
     }
   }
 }
