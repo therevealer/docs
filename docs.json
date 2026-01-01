@@ -3,7 +3,7 @@
   "name": "zkPass",
   "colors": {
     "primary": "#8fce00",
-    "light": "#D4FF0A", 
+    "light": "#808080", 
     "dark": "#A8D800"
   },
   "favicon": "/favicon.svg",
