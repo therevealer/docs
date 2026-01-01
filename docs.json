@@ -17,8 +17,8 @@
             "group": "Getting started",
             "pages": [
               "getting-started/quickstart",
-              "getting-started/Installation-guide",
               "getting-started/introduction",
+              "getting-started/Installation-guide",
               "getting-started/overview"
             ]
           },
@@ -112,6 +112,9 @@
     ],
 
     "global": {
+      "pages": [
+        "getting-started/quickstart"
+      ],
       "anchors": [
         {
           "anchor": "Community",
