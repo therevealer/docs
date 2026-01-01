@@ -1,5 +1,4 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "zkPass",
   "colors": {
@@ -111,16 +110,11 @@
     ],
 
     "global": {
-      "pages": [
-        "getting-started/quickstart"
-      ],
-
       "anchors": [
-        {
-          "anchor": "Community",
-          "href": "https://discord.com/invite/zkpass",
-          "icon": "discord"
-        },
+      {
+          "anchor": "Quickstart",
+          "href": "getting-started/quickstart"
+      },
         {
           "anchor": "ZKPass Portal",
           "href": "https://portal.zkpass.org/",
