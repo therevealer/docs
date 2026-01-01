@@ -113,7 +113,7 @@
       "anchors": [
       {
           "anchor": "Quickstart",
-          "href": "getting-started/quickstart"
+          "href": "/getting-started/quickstart"
       },
         {
           "anchor": "ZKPass Portal",
