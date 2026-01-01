@@ -2,12 +2,25 @@
   "theme": "mint",
   "name": "zkPass",
   "colors": {
-    "primary": "#07C983",
+    "primary": "#8fce00",
     "light": "#D4FF0A", 
     "dark": "#A8D800"
   },
   "favicon": "/favicon.svg",
   "navigation": {
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Quickstart",
+          "href": "/getting-started/quickstart"
+        },
+        {
+          "anchor": "ZKPass Portal",
+          "icon": "rocket",
+          "href": "https://portal.zkpass.org/"
+        }
+      ]
+    },
     "tabs": [
       {
         "tab": "Guides",
@@ -20,46 +33,39 @@
               "getting-started/overview"
             ]
           },
-
           {
-  "group": "Developer Guides",
-  "pages": [
-    
-    {
-      "group": "JS-SDK",
-      "pages": [
-        "developer-guides/js-sdk/overview",
-        "developer-guides/js-sdk/how-it-works",
-        "developer-guides/js-sdk/quick-start",
-        
-        {
-          "group": "Generate proof",
-          "pages": [
-            "developer-guides/proof/evm",
-            "developer-guides/proof/solana",
-            "developer-guides/proof/ton"
-          ]
-        },
-        
-        {
-          "group": "Schema",
-          "pages": [
-            "developer-guides/schema/overview",
-            "developer-guides/schema/custom-schema",
-            "developer-guides/schema/quickstart"
-          ]
-        },
-        
-        "developer-guides/js-sdk/API-References",
-        "developer-guides/js-sdk/error-handling",
-        "developer-guides/js-sdk/references"
-                
-        ]
-      },
-        "developer-guides/intract"
-    ]
-  },
-
+            "group": "Developer Guides",
+            "pages": [
+              {
+                "group": "JS-SDK",
+                "pages": [
+                  "developer-guides/js-sdk/overview",
+                  "developer-guides/js-sdk/how-it-works",
+                  "developer-guides/js-sdk/quick-start",
+                  {
+                    "group": "Generate proof",
+                    "pages": [
+                      "developer-guides/proof/evm",
+                      "developer-guides/proof/solana",
+                      "developer-guides/proof/ton"
+                    ]
+                  },
+                  {
+                    "group": "Schema",
+                    "pages": [
+                      "developer-guides/schema/overview",
+                      "developer-guides/schema/custom-schema",
+                      "developer-guides/schema/quickstart"
+                    ]
+                  },
+                  "developer-guides/js-sdk/API-References",
+                  "developer-guides/js-sdk/error-handling",
+                  "developer-guides/js-sdk/references"
+                ]
+              },
+              "developer-guides/intract"
+            ]
+          },
           {
             "group": "ZK Pass DAO",
             "pages": [
@@ -67,7 +73,6 @@
               "essentials/zkp"
             ]
           },
-
           {
             "group": "Support",
             "pages": [
@@ -77,10 +82,8 @@
               "essentials/privacy-policy"
             ]
           }
-          
-        ] 
+        ]
       },
-
       {
         "tab": "Use Cases",
         "groups": [
@@ -101,27 +104,11 @@
           },
           {
             "group": "Endpoint examples",
-            "pages": [
-              
-            ]
+            "pages": []
           }
         ]
       }
-    ],
-
-    "global": {
-      "anchors": [
-      {
-          "anchor": "Quickstart",
-          "href": "/getting-started/quickstart"
-      },
-        {
-          "anchor": "ZKPass Portal",
-          "href": "https://portal.zkpass.org/",
-          "icon": "rocket"
-        }
-      ]
-    }
+    ]
   },
   "logo": {
     "light": "/logo/logo.png",

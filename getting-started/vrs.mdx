@@ -1,3 +1,61 @@
 ---
 title: "VRS"
+description: "Verifiable Reputation Score (VRS): A Coverage-Penalized Multi-Source Reputation Scoring Framework"
 ---
+
+### **Purpose & Vision**
+
+The **Verifiable Reputation Score (VRS)** was first introduced as a proof-based mechanism to recognize authenticity, contribution, and engagement across the zkPass ecosystem. It quantifies how complete and credible your digital identity is across multiple verified data sources, while preserving privacy through zero-knowledge proofs. Higher scores grant greater access and priority in ecosystem participation, ensuring that credibility and genuine contribution are rewarded alongside timing.
+
+### **Quick Start**
+
+Access the VRS module at [portal.zkpass.org](http://portal.zkpass.org), where users can connect wallets, verify data sources, and view their computed Verifiable Reputation Score in real time.
+
+#### **What you need**
+
+1. A wallet such as [MetaMask](https://metamask.io/download/).
+2. TransGate on your device. • Desktop Chrome installs the [TransGate extension](https://chrome.google.com/webstore/detail/zkpass-transgate/afkoofjocpbclhnldmmaphappihehpma?utm_source=ext_sidebar&hl). • iOS uses TransGate via app-clip. **No need to download any apps.** • Android installs the [TransGate app](https://play.google.com/store/search?q=transgate&c=apps) from Google Play.
+3. A few eligible accounts to verify such as Binance, LinkedIn, GitHub, Duolingo, or Kaito Yap.
+
+**We recommend using the desktop web version for the smoothest experience.**
+
+#### **How to verify on desktop web**
+
+1. Install the[ TransGate Chrome extension](https://chrome.google.com/webstore/detail/zkpass-transgate/afkoofjocpbclhnldmmaphappihehpma?utm_source=ext_sidebar&hl).
+2. Open the [zkPass Portal page](https://portal.zkpass.org/).
+3. Connect your X account → Pick a source and select Verify → A new tab opens the source site → Sign in as usual.
+4. Click Start in the popup, a zero-knowledge proof generates locally within seconds. Your VRS updates automatically. No gas fee is required.
+
+#### **How to verify on mobile**
+
+iOS
+
+1. Open the [zkPass Portal page](https://portal.zkpass.org/) in the in-app browser flow.
+2. Connect your X account and sign in to each source when prompted and tap Start.
+3. Return to see the Verified status and updated VRS.
+
+Android
+
+1. Install TransGate from [Google Play.](https://play.google.com/store/apps/details?id=com.zkpass.transgate&hl=en&pli=1)
+2. Open the [zkPass Portal page](https://portal.zkpass.org/) in any wallet.
+3. Connect your X account, sign in to a source, tap Start, then return to view the updated VRS.
+
+<Info>
+  Proofs are generated locally. Raw personal data does not leave your device. Verifiers receive only cryptographic attestations.
+</Info>
+
+### **Core Principal**
+
+VRS isn’t about popularity, wealth, or social ranking. It’s about **proof density** - how many aspects of your digital footprint have been independently verified, and how consistent they are.
+
+- A single Binance KYC attestation may prove you’re a real person.
+- A LinkedIn or GitHub profile shows professional authenticity.
+- A Duolingo streak or Kaito YAP credential reflects learning or contribution.
+
+Together, these form your **verifiable identity fabric**. The more complete and trustworthy that fabric becomes, the higher your VRS.
+
+#### **Conceptual Design**
+
+The VRS is derived from zkPass’s open-source _Coverage-Penalized Multi-Source Reputation Framework_, designed to fairly evaluate users based on both **what they’ve proven** and **what they’ve yet to prove**.
+
+It consists of five layers:
