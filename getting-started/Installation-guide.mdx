@@ -5,35 +5,83 @@ description: "To ensure a smooth and secure experience when using applications i
 
 ## **Desktop (Windows / macOS)**
 
-**Recommended Setup:**
+### **Recommended Setup**
 
 - **Browser**: Latest version of **Google Chrome** or **Brave**
 - **Wallet**: [MetaMask](https://metamask.io/download/) browser extension (ensure it is installed, unlocked, and connected)
 
 <Note>
-  When you’re setting up a wallet, be sure to:
-
-  Download and install only the latest version from their official source.
-
-  Back up your recovery phrases and keep them safe.
-
-  Never share your recovery phrases with anyone, under any circumstances.
+  Ensure you download and install only the latest version from the official source, and back up your recovery phrases and keep them secure.
 </Note>
 
-**Usage Instructions:**
+### Usage Instructions
 
-******Option1:  Install the TransGate on Google Extension Store******
-
-<Note>
-  Please kindly note that **DON’T** install any **Transgate Extensions** obtained from third-party channels. This measure ensures that all installed extensions have undergone proper vetting and are up to our standards. Stick to [\*\*official link \*\*](https://chrome.google.com/webstore/detail/zkpass-transgate/afkoofjocpbclhnldmmaphappihehpma?utm_source=ext_sidebar&hl)and protect your personal accounts securely.
-</Note>
-
-
-<Warning>
-  Please refrain from installing extensions from third-party sources. We cannot take responsibility for any problems that may occur as a result of installing such extensions. Stick to zkPass official link and trusted sources for a secure browsing experience.
-</Warning>
+******Install the TransGate on the Google Extension Store******
 
 1. Open the application link in your browser.
 2. When prompted, approve the wallet connection via MetaMask.
 3. Grant permissions for pop-ups and cross-site cookies (if disabled, verification flow may be blocked).
-4. Log in the data source like usual, zkPass verification will run in-browser; please **do not close the tab** during the process.
+4. Log in to the data source as usual; zkPass verification will run in the browser. Please **do not close the tab** during the process.
+
+<Info>
+  Refresh the page if any UI components fail to load after connecting.
+</Info>
+
+## **iOS (iPhone)** 
+
+**Scan the QR code and complete the process on your mobile device.**
+
+The zkPass SDK is fully supported through Apple’s **App Clip** experience, offering a seamless, secure verification process with no installation required.
+
+**Instructions:**
+
+1. Open the zkPass-integrated dApp link in **Safari** or scan the associated **QR code**.
+2. An App Clip card will appear — tap **“Open”** to launch the zkPass verification flow.
+3. You will be guided through wallet connection and data verification within the App Clip environment.
+4. Complete the process and return to the main dApp. No persistent apps or background services will remain.
+
+**Requirements:**
+
+- iOS 14.3 or later
+- Safari or camera access (for QR codes)
+- Ensure App Clips are enabled under iOS Settings → App Clips
+
+**Note that**
+
+- Wallet connection will be handled in-session. MetaMask or WalletConnect will be triggered as needed.
+- All processes are sandboxed and privacy-preserving, in accordance with Apple’s App Clip policies.
+
+<Warning>
+  Please refrain from installing extensions from third-party sources. We cannot take responsibility for any issues that may arise from installing such extensions. Stick to the zkPass official link and trusted sources for a secure browsing experience.
+</Warning>
+
+## **Android Devices**
+
+Required: Install the [TransGate App](https://play.google.com/store/search?q=transgate&c=apps) from the Google Play Store
+
+On Android, zkPass SDK operates via a native client—**TransGate**—to ensure secure communication and proof generation.
+
+**Instructions - (Chrome Browser + MetaMask Mobile App):**
+
+1. Open the application link in Chrome or another Chromium-based browser.
+2. Upon wallet connection request, select **MetaMask** or via WalletConnect.
+3. Approve all requests in MetaMask and return to the original browser tab to complete verification.
+
+**Instructions - (MetaMask In-App Browser) :**
+
+<Info>
+  Due to system-level restrictions, MetaMask’s in-app browser **does not fully support dApp redirects** or advanced authentication features. Use a standalone browser for better stability.
+</Info>
+
+<Note>
+  **The TransGate Android app currently supports Android 12 and above.** If your device isn’t compatible, using the Mise + TransGate extension is the recommended alternative below:
+</Note>
+
+1. Download Mise from https://mise.xyz if you haven't already.
+2. **Go to the Extension Page**  and open this link in Mise: 👉 [TransGate on Chrome Web Store](https://chromewebstore.google.com/detail/zkpass-transgate/afkoofjocpbclhnldmmaphappihehpma)
+3. **Click "Add to Chrome **and confirm the prompt, and wait for the installation to finish.
+4. **Verify Installation:** After installation, you should see the TransGate icon in the top-right corner of your browser. Visit any zkPass-supported page to start using it.
+
+<Tip>
+  To ensure the efficient use of computational and gas resources, it is advisable not to use multiple addresses to attest to the same schema with the same account. Doing so will overwrite previous attestations, resulting in unnecessary resource consumption without yielding additional rewards.
+</Tip>
