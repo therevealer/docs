@@ -1,0 +1,128 @@
+---
+title: "EVM"
+description: "Generate proof on EVM"
+---
+
+After running Transgate through the SDK, a proof will be returned. You can verify it locally or on-chain. We currently support the EVM and Solana ecosystems.
+
+```Javascript EVM.js icon=square-js
+
+const generate = async (schemaId: string, appid: string) => {
+    try {
+      // The appid of the project created in dev center
+      const appid = "8fb9d43c-2f24-424e-a98d-7ba34a5532f5"
+  
+      // Create the connector instance
+      const connector = new TransgateConnect(appid)
+  
+      // Check if the TransGate extension is installed
+      // If it returns false, please prompt to install it from chrome web store
+      const isAvailable = await connector.isTransgateAvailable()
+  
+      if (isAvailable) {
+        // The schema id of the project
+        const schemaId = "516a720e-29a4-4307-ae7b-5aec286e446e"
+  
+        // Launch the process of verification
+        // This method can be invoked in a loop when dealing with multiple schemas
+        const res = await connector.launch(schemaId)
+        
+        // If you want to send the result to the blockchain, please add the wallet address as the second parameter.
+        // const res = await connector.launch(schemaId, address)
+  
+        // verifiy the res onchain/offchain based on the requirement     
+        
+      } else {
+        console.log('Please install TransGate')
+      }
+    } catch (error) {
+      console.log('transgate error', error)
+    }
+  }
+```
+
+```HelloWorld.java example icon=java lines
+class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}
+```
+
+### **Verify Allocator Signature**
+
+#### **Encode the allocator message struct**
+
+```Javascript Encode.js icon=square-js
+import Web3 from "web3"
+
+const web3 = new Web3()
+
+const { taskId } = res //return by Transgate
+
+const taskIdHex = Web3.utils.stringToHex(taskId)
+const schemaIdHex = Web3.utils.stringToHex(schemaId)
+
+const encodeParams = web3.eth.abi.encodeParameters(
+  ["bytes32", "bytes32", "address"],
+  [taskIdHex, schemaIdHex, validatorAddress]
+)
+const paramsHash = Web3.utils.soliditySha3(encodeParams)
+```
+
+**Recover the allocator address**
+
+```javascript
+const signedAllocatorAddress = web3.eth.accounts.recover(paramsHash, allocatorSignature)
+```
+
+#### **Check if the signed allocator address is registered. The current allocator address is fixed.**
+
+```
+return signedAllocatorAddress === "0x19a567b3b212a5b35bA0E3B600FbEd5c2eE9083d"
+```
+
+### **Verify Validator Signature**
+
+#### **Encode the validator message**
+
+```javascript verify.js icon=square-js
+import Web3 from "web3"
+
+const web3 = new Web3()
+
+const { taskId, uHash, publicFieldsHash, recipient } = res //return by Transgate
+
+const taskIdHex = Web3.utils.stringToHex(taskId)
+const schemaIdHex = Web3.utils.stringToHex(schemaId)
+
+
+const types = ["bytes32", "bytes32", "bytes32", "bytes32"]
+const values = [taskIdHex, schemaIdHex, uHash, publicFieldsHash]
+
+//If you add the wallet address as the second parameter when launch the Transgate
+if (recipient) {
+    types.push("address")
+    values.push(recipient)
+}
+
+const encodeParams = web3.eth.abi.encodeParameters(types, values)
+
+const paramsHash = Web3.utils.soliditySha3(encodeParams)
+```
+
+Recover the validator address
+
+```
+const signedValidatorAddress = web3.eth.accounts.recover(paramsHash, validatorSignature)
+```
+
+Verify if the signed validator address matches the address assigned by the allocator.
+
+```
+return signedValidatorAddress === validatorAddress
+```
+
+<Tip>
+  Here, we've only given the reference code for off-chain verification. However, the result can also be verified on-chain.
+</Tip>

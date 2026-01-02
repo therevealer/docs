@@ -1,3 +1,81 @@
 ---
 title: "FAQ"
+description: "Frequently asked questions list."
 ---
+
+<Tip>
+  Need help? Join our [Discord](https://discord.gg/zkpass) to ask any questions.
+</Tip>
+
+## How does zkPass work?
+
+zkPass uses Three-Party TLS (3P-TLS) and Hybrid Zero-Knowledge Proof (Hybrid ZK) for secure data handling. It starts with a three-party handshake among a data source (S), user (P), and zkPass node (V), generating shared session keys with Paillier encryption for security. P and V jointly compute keys for encryption and authentication, with V restricted from accessing the user's private data. The process includes standard TLS steps and prepares for zero-knowledge proofs.
+
+zkPass employs a hybrid zero-knowledge approach, merging interactive (VOLE-ZK 23) and non-interactive protocols. VOLE-ZK 23 ensures data origin authenticity and client tamper protection, optimized by SoftSpoken for efficiency and focusing on AND gates for simplicity.
+
+For non-interactive zero-knowledge (NIZK), zkPass uses the SNARK framework. Verified results are signed and added to a Merkle tree in the SBT (Soul Bound Token) contract, ensuring efficient, secure, and private validation.
+
+<Check>
+  **View the **[**Technical Overview**](https://medium.com/zkpass/a-technical-overview-of-zkpass-protocol-e28303e472e9)** to learn more details.**
+</Check>
+
+## How does zkPass prove the truth of HTTPS data?
+
+The truth of HTTPS data relies on two key aspects:
+
+1. **Integrity of Encrypted Data from Trusted Sources**: During zkPass's MPC network protocol execution, random nodes are selected to establish a "client" connection with the user, facilitating communication with the server, effectively forming a three-party TLS connection. In this scenario, the user possesses shares of both the encryption key and the MAC key, while the nodes only have the remaining portion of the MAC key. Any attempt by users to tamper with data from a trusted source will result in a failure during MAC verification. Consequently, the integrity of data in the three-party TLS connection is ensured.
+2. **Conformance of Data Statements to Verifier Requirements**: When assessing the authenticity of data statements, zkPass employs Hybrid ZK technology to safeguard customer privacy. The protocol can only be executed successfully if the data conforms to conditions specified by the template, such as age \> 18 or assets \< 10000. This ensures that the accuracy and truthfulness of the data are also guaranteed.
+
+## How is the credibility of data sources ensured?
+
+To ensure the credibility of data sources, the Prover and Node work together as a client to communicate with the server. Once the Client and Server have completed the **_SayHello_** process, the Client will request the server return the certificate. The Node inside the Client can also retrieve the certificate and verify its authenticity to ensure the trustworthiness of the data source.
+
+## What are the key advantages of zkPass?
+
+**1. Privacy-preserving - **Prove your identity without uploading any personal data.
+
+**2. Verifiable - **Re-designed the standard TLS protocol into a three-party TLS to ensure the provenance of private data.
+
+**3. Compatible - **Seamless, compatible with any HTTPS websites, no API or license required.
+
+**4. Verifiability - **The zkPass protocol guarantees the verifiability, authenticity, and validity of private data by utilizing decentralized MPC nodes that verify a user's data integrity before generating a zero-knowledge proof (ZKP). As a result, it becomes impossible for anyone to manipulate or tamper with the data during zkSBT generation.
+
+**5. Anti-Cheating - **zkPass's anti-cheating mechanism ensures data integrity and authenticity by using zero-knowledge proofs to verify that client requests and server responses match predefined templates and conditions without accessing or storing private data.
+
+**6. Memory-efficiency - **VOLE-based IZK that enables millisecond-level ZKP generation locally in the browser.
+
+## Will zkPass TransaGate handle or store the user's private data?
+
+The zkPass TransGate operates on the client side and does not retain any private data of the Prover. To access the Server, the Prover utilizes their username and password to log in and acquire an access token. This access token enables the Prover to retrieve information from the server via a public interface. The Prover then employs this information to generate Zero-Knowledge Proofs (ZKP) and submits them for on-chain verification.
+
+Throughout the entire process, the encrypted key remains inaccessible to the Verifier, thereby ensuring the security and confidentiality of the user's private data.
+
+## How can the prover's tampering with private data be prevented locally?
+
+zkPass's anti-cheating mechanism ensures the correctness and integrity of data exchanges between clients and servers through zero-knowledge proofs. The main steps include:
+
+1. **Verifying the Correctness of Client's Request**: The client encrypts the request data and ensures that the generated ciphertext matches the expected node ciphertext, preventing tampering.
+2. **Validating the Correctness of Client's URL**: Ensuring the URL provided by the client matches the predefined template, verifying the correctness of the request address.
+3. **Ensuring the Client Receives the Correct Response**: Comparing the encrypted response data with the node ciphertext to verify the integrity of the response received by the client.
+4. **Matching Response Attributes to the Template**: Ensuring that the attributes within the response data align with those specified in the template, verifying the accuracy of the response content.
+5. **Validating the Asserted Value’s Correctness**: Checking if the value in the response data satisfies certain conditions specified by the template, ensuring the logical correctness of the response data.
+
+Through these steps, zkPass not only guarantees the privacy and security of data verification but also ensures the integrity of client-server communications, preventing malicious tampering and fraudulent activities.
+
+<Tip>
+  More Details: [Anti-cheating mechanisms on zkPass](https://medium.com/zkpass/introducing-the-anti-cheating-mechanisms-on-zkpass-4427d24cbe7d)
+</Tip>
+
+## How can duplicate accounts with different addresses be addressed?
+
+zkPass addresses the issue of duplicate accounts with different addresses by selecting a unique and private identification field returned by the server. For instance, for Twitter, the "id" field (displayed as the "reset_id" field in the URL) can be used, and it is hashed before being sent to the blockchain.
+
+To handle different addresses with the same verification account, zkPass employs the overlay mode. For instance, if the hash value is detected to be the same, the current address verification will be marked as "pass," while the previously passed address will be marked as "invalid." This mode can also address the scenario where a user has lost their address.
+
+## How is the zkPass network distributed?
+
+On the early stage of the protocol development, the Nodes are operated by the zkPass team. As the network expands, there is an incentive for the community to participate and join the network until a dynamic equilibrium is attained.
+
+If the demand for verification rises, the revenue generated by the protocol and the individual nodes, as well as the number of nodes, will increase accordingly. However, as the number of nodes reaches a certain threshold, the income for each node will decrease, leading to a subsequent decrease in the number of nodes.
+
+Ultimately, the network will stabilize and reach a state of equilibrium where the scale of the network is balanced and sustainable.

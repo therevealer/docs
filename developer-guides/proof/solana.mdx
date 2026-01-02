@@ -1,0 +1,138 @@
+---
+description: "Only supports SDK version 0.2.0 and above."
+title: "Solana"
+---
+
+**How to generate the proof with Solana?**
+
+```Javascript
+const generate = async (schemaId: string, appid: string) => {
+    try {
+      //check if you install the Phatom wallet
+      if (!("phantom" in window)) {
+        return alert("Please install Phantom wallet")
+      }
+      
+      const provider = window.phantom?.solana
+      const resp = await provider?.connect() //connect wallet
+      const account = resp.publicKey.toString()
+
+      //The appid of the project created in dev center     
+      const appid = "39a00e9e-7e6d-461e-9b9d-d520b355d1c0"
+      //The schemaId of the project
+      const schemaId = "c7eab8b7d7e44b05b41b613fe548edf5"
+            
+      const connector = new TransgateConnect(appid)
+      
+      const isAvailable = await connector.isTransgateAvailable()
+      if (!isAvailable) {
+        return alert("Please install zkPass TransGate")
+      }
+      
+      const res = (await connector.launchWithSolana(schemaId, account)) as Result
+
+    } catch (err) {
+      alert(JSON.stringify(err))
+      console.log("error", err)
+    }
+  }
+```
+
+<Tip>
+  The result includes two signatures: the allocator signature and the validator signature. Developers should verify both signatures based on the other returned fields.
+</Tip>
+
+**Verify Allocator Signature**
+
+**Encode the allocator message struct.**
+
+```Javascript
+
+import { Buffer } from "buffer"
+import secp256k1 from "secp256k1"
+import * as borsh from "borsh"
+import sha3 from 'js-sha3'
+
+//Attest struct for Solana
+const SolanaTask = {
+  struct: {
+    task: 'string',
+    schema: 'string',
+    notary: 'string',
+  },
+}
+
+const { taskId, allocatorSignature, validatorAddress } = res //return by Transgate
+
+const sig_bytes = hexToBytes(allocatorSignature.slice(2));
+
+const signatureBytes = sig_bytes.slice(0, 64);
+const recoverId = Array.from(sig_bytes.slice(64))[0];
+
+const plaintext = borsh.serialize(SolanaTask, {
+    task: taskId,
+    schema: schema,
+    notary: validatorAddress,
+ });
+
+const plaintextHash = Buffer.from(sha3.keccak_256.digest(Buffer.from(plaintext)));
+```
+
+**Recover the allocator address**
+
+**Check if the signed allocator address is registered. The current  allocator address is fixed.**
+
+### **Verify Validator Signature**
+
+#### **Generate the validator message**
+
+```Javascript
+
+import { Buffer } from "buffer"
+import secp256k1 from "secp256k1"
+import * as borsh from "borsh"
+import sha3 from "js-sha3"
+
+//Attest struct for Solana
+const Attest = {
+  struct: {
+    task: "string",
+    schema: "string",
+    nullifier: "string",
+    recipient: "string",
+    publicFieldsHash: "string",
+  },
+}
+
+const { taskId, uHash, validatorAddress, schema, validatorSignature, recipient, publicFieldsHash } = res //return by Transgate
+const sig_bytes = hexToBytes(validatorSignature.slice(2)) //skip the 0x
+
+const signatureBytes = sig_bytes.slice(0, 64)
+const recoverId = Array.from(sig_bytes.slice(64))[0]
+
+const plaintext = borsh.serialize(Attest, {
+  task: taskId,
+  nullifier: uHash,
+  schema,
+  recipient,
+  publicFieldsHash,
+})
+
+const plaintextHash = Buffer.from(sha3.keccak_256.digest(Buffer.from(plaintext)))
+```
+
+**Recover the validator address**
+
+```
+ const signedValidatorAddress = secp256k1.ecdsaRecover(signatureBytes, recoverId, plaintextHash, false);
+```
+
+**Verify if the signed validator address matches the address assigned by the allocator**
+
+```
+return signedValidatorAddress === validatorAddress
+```
+
+<Tip>
+  Here, we've only given the reference code for js verification. However, the result can also be verified on Solana.
+</Tip>
