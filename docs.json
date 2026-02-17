@@ -42,16 +42,14 @@
     {
       "group": "Developers",
       "pages": [
-        {
-          "group": "JS SDK",
-          "pages": [
-            "developer-guides/js-sdk/overview",
             {
-              "group": "Core Concepts",
+              "group": "JS SDK",
               "pages": [
-                "developer-guides/js-sdk/how-it-works"
+                "developer-guides/js-sdk/overview",
+                "developer-guides/js-sdk/how-it-works",
+                "developer-guides/js-sdk/quick-start"
               ]
-            },
+           },
             {
               "group": "Proof Generation",
               "pages": [
