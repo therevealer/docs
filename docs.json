@@ -22,75 +22,91 @@
       ]
     },
     "tabs": [
-      {
-        "tab": "Guides",
-        "groups": [
-          {
-            "group": "Getting started",
-            "pages": [
-              "getting-started/introduction",
-              "getting-started/Installation-guide"
-            ]
-          },
-          {
-            "group": "Core Concepts",
-            "pages": [
-              "getting-started/overview",
-              "getting-started/vrs"
-            ]
-          },
-          {
-            "group": "Developer Guides",
-            "pages": [
-              {
-                "group": "JS-SDK",
-                "pages": [
-                  "developer-guides/js-sdk/overview",
-                  "developer-guides/js-sdk/how-it-works",
-                  "developer-guides/js-sdk/quick-start",
-                  {
-                    "group": "Generate proof",
-                    "pages": [
-                      "developer-guides/proof/evm",
-                      "developer-guides/proof/solana",
-                      "developer-guides/proof/ton"
-                    ]
-                  },
-                  {
-                    "group": "Schema",
-                    "pages": [
-                      "developer-guides/schema/overview",
-                      "developer-guides/schema/custom-schema",
-                      "developer-guides/schema/quickstart"
-                    ]
-                  },
-                  "developer-guides/js-sdk/API-References",
-                  "developer-guides/js-sdk/error-handling",
-                  "developer-guides/js-sdk/references"
-                ]
-              },
-              "developer-guides/intract"
-            ]
-          },
-          {
-            "group": "Governance",
-            "pages": [
-              "essentials/zk-pass-dao",
-              "essentials/vaap",
-              "essentials/zkp"
-            ]
-          },
-          {
-            "group": "Help & Legal",
-            "pages": [
-              "essentials/faq",
-              "essentials/roadmap",
-              "essentials/terms-conditions",
-              "essentials/privacy-policy"
-            ]
-          }
-        ]
-      },
+{
+  "tab": "Guides",
+  "groups": [
+    {
+      "group": "Getting Started",
+      "pages": [
+        "getting-started/introduction",
+        "getting-started/Installation-guide"
+      ]
+    },
+    {
+      "group": "Core Concepts",
+      "pages": [
+        "getting-started/overview",
+        "getting-started/vrs"
+      ]
+    },
+    {
+      "group": "Developers",
+      "pages": [
+        {
+          "group": "Quick Start",
+          "pages": [
+            "developer-guides/js-sdk/quick-start"
+          ]
+        },
+        {
+          "group": "JS SDK",
+          "pages": [
+            "developer-guides/js-sdk/overview",
+            {
+              "group": "Core Concepts",
+              "pages": [
+                "developer-guides/js-sdk/how-it-works"
+              ]
+            },
+            {
+              "group": "Proof Generation",
+              "pages": [
+                "developer-guides/proof/evm",
+                "developer-guides/proof/solana",
+                "developer-guides/proof/ton"
+              ]
+            },
+            {
+              "group": "Schema System",
+              "pages": [
+                "developer-guides/schema/overview",
+                "developer-guides/schema/custom-schema",
+                "developer-guides/schema/quickstart"
+              ]
+            },
+            "developer-guides/js-sdk/api-references",
+            "developer-guides/js-sdk/error-handling",
+            "developer-guides/js-sdk/references"
+          ]
+        },
+        {
+          "group": "Integrations",
+          "pages": [
+            "developer-guides/intract"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Governance",
+      "pages": [
+        "essentials/zk-pass-dao",
+        "essentials/vaap",
+        "essentials/zkp"
+      ]
+    },
+    {
+      "group": "Help & Legal",
+      "pages": [
+        "essentials/faq",
+        "essentials/roadmap",
+        "essentials/terms-conditions",
+        "essentials/privacy-policy"
+      ]
+    }
+  ]
+}
+,
       {
         "tab": "Use Cases",
         "groups": [
