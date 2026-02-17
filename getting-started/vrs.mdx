@@ -1,61 +1,175 @@
 ---
-title: "VRS"
-description: "Verifiable Reputation Score (VRS): A Coverage-Penalized Multi-Source Reputation Scoring Framework"
+title: "Verifiable Reputation Score (VRS)"
+description: "A proof-based reputation framework that quantifies identity completeness and credibility using zero-knowledge attestations."
 ---
 
-### **Purpose & Vision**
+## Purpose & Vision
 
-The **Verifiable Reputation Score (VRS)** was first introduced as a proof-based mechanism to recognize authenticity, contribution, and engagement across the zkPass ecosystem. It quantifies how complete and credible your digital identity is across multiple verified data sources, while preserving privacy through zero-knowledge proofs. Higher scores grant greater access and priority in ecosystem participation, ensuring that credibility and genuine contribution are rewarded alongside timing.
+The **Verifiable Reputation Score (VRS)** is a proof-based mechanism designed to recognise authenticity, contribution, and engagement across the zkPass ecosystem.
 
-### **Quick Start**
+It quantifies the completeness and credibility of a user’s digital identity across multiple verified data sources, while preserving privacy through zero-knowledge proofs.
 
-Access the VRS module at [portal.zkpass.org](http://portal.zkpass.org), where users can connect wallets, verify data sources, and view their computed Verifiable Reputation Score in real time.
+Higher scores grant greater access and priority in ecosystem participation, ensuring that credibility and genuine contribution are rewarded alongside timing.
 
-#### **What you need**
+## Quick Start
 
-1. A wallet such as [MetaMask](https://metamask.io/download/).
-2. TransGate on your device. • Desktop Chrome installs the [TransGate extension](https://chrome.google.com/webstore/detail/zkpass-transgate/afkoofjocpbclhnldmmaphappihehpma?utm_source=ext_sidebar&hl). • iOS uses TransGate via app-clip. **No need to download any apps.** • Android installs the [TransGate app](https://play.google.com/store/search?q=transgate&c=apps) from Google Play.
-3. A few eligible accounts to verify such as Binance, LinkedIn, GitHub, Duolingo, or Kaito Yap.
+Access the VRS module at [**https://portal.zkpass.org**](https://portal.zkpass.org) to connect a wallet, verify data sources, and view your Verifiable Reputation Score in real time.
 
-**We recommend using the desktop web version for the smoothest experience.**
+### What You Get
 
-#### **How to verify on desktop web**
+A personal VRS ranging from **0–100** determines your **\$ZKP allocation priority** on the :contentReference[oaicite:1]index=1.\
+Higher scores receive preferential access under campaign rules.
 
-1. Install the[ TransGate Chrome extension](https://chrome.google.com/webstore/detail/zkpass-transgate/afkoofjocpbclhnldmmaphappihehpma?utm_source=ext_sidebar&hl).
-2. Open the [zkPass Portal page](https://portal.zkpass.org/).
-3. Connect your X account → Pick a source and select Verify → A new tab opens the source site → Sign in as usual.
-4. Click Start in the popup, a zero-knowledge proof generates locally within seconds. Your VRS updates automatically. No gas fee is required.
+### What You Need
 
-#### **How to verify on mobile**
+1. A wallet such as **MetaMask**
+2. **TransGate** on your device
+   - **Desktop:** Chrome extension
+   - **iOS:** App Clip (no installation required)
+   - **Android:** TransGate app from Google Play
+3. Eligible accounts such as **Binance, LinkedIn, GitHub, Duolingo, or Kaito Yap**
 
-iOS
+> **Recommendation:** Desktop web provides the smoothest experience.
 
-1. Open the [zkPass Portal page](https://portal.zkpass.org/) in the in-app browser flow.
-2. Connect your X account and sign in to each source when prompted and tap Start.
-3. Return to see the Verified status and updated VRS.
+---
 
-Android
+## Verification Guide
 
-1. Install TransGate from [Google Play.](https://play.google.com/store/apps/details?id=com.zkpass.transgate&hl=en&pli=1)
-2. Open the [zkPass Portal page](https://portal.zkpass.org/) in any wallet.
-3. Connect your X account, sign in to a source, tap Start, then return to view the updated VRS.
+### Desktop Web
 
-<Info>
-  Proofs are generated locally. Raw personal data does not leave your device. Verifiers receive only cryptographic attestations.
-</Info>
+1. Install the TransGate Chrome extension
+2. Open **portal.zkpass.org**
+3. Connect your X account → choose a source → select **Verify**
+4. Sign in to the source as usual
+5. Click **Start** — the proof is generated locally and your VRS updates automatically
 
-### **Core Principal**
+No gas fees are required.
 
-VRS isn’t about popularity, wealth, or social ranking. It’s about **proof density** - how many aspects of your digital footprint have been independently verified, and how consistent they are.
+### Mobile
 
-- A single Binance KYC attestation may prove you’re a real person.
-- A LinkedIn or GitHub profile shows professional authenticity.
-- A Duolingo streak or Kaito YAP credential reflects learning or contribution.
+**iOS**
 
-Together, these form your **verifiable identity fabric**. The more complete and trustworthy that fabric becomes, the higher your VRS.
+1. Open **portal.zkpass.org** in the in-app browser
+2. Connect your X account and verify each source
+3. Return to view your updated VRS
 
-#### **Conceptual Design**
+**Android**
 
-The VRS is derived from zkPass’s open-source _Coverage-Penalized Multi-Source Reputation Framework_, designed to fairly evaluate users based on both **what they’ve proven** and **what they’ve yet to prove**.
+1. Install TransGate from Google Play
+2. Open **portal.zkpass.org** in your wallet browser
+3. Connect, verify, tap **Start**, and return to view your score
 
-It consists of five layers:
+<success>
+  Proofs are generated locally. Raw personal data never leaves your device.\
+  Verifiers receive only cryptographic attestations.
+</success>
+
+---
+
+## Core Principle
+
+VRS is not about popularity, wealth, or social ranking.
+
+It measures **proof density** — how many independent aspects of your digital footprint are verified and how consistent they are.
+
+- Binance KYC → proves real-person uniqueness
+- LinkedIn / GitHub → professional authenticity
+- Duolingo / Kaito Yap → learning and contribution
+
+Together, these form your **verifiable identity fabric**.
+
+## Conceptual Design
+
+VRS is built on zkPass’s open-source **Coverage-Penalized Multi-Source Reputation Framework**, designed to evaluate both **verified proofs** and **missing coverage**.
+
+### Scoring Layers
+
+| Layer                  | Purpose                     | Description                                                                       |
+| ---------------------- | --------------------------- | --------------------------------------------------------------------------------- |
+| Feature Normalization  | Standardize raw metrics     | Maps heterogeneous data into [0–1] using log scale, SoftClip, and boolean mapping |
+| Per-Source Aggregation | Combine features per source | Weighted sum based on feature importance                                          |
+| Cross-Source Weighting | Aggregate sources           | Applies global weights (e.g. KYC \> social)                                       |
+| Weighted Coverage      | Measure completeness        | Computes ratio of verified vs expected sources                                    |
+| Nonlinear Penalty      | Penalize gaps               | Applies exponent α \> 1 to missing coverage                                       |
+
+---
+
+## Mathematical Formulation
+
+Let **Sᵢ** be the score of source _i_ and **Wᵢ** its global weight.\
+Let **A** be the set of verified sources.
+
+Notesss
+
+Where α\>1  controls how aggressively incomplete coverage reduces your score. Example: with C=0.8,α=1.5, only 83.7 % of the value is retained
+
+---
+
+## Score Interpretation
+
+| Score Range | Meaning          | Typical Profile               |
+| ----------- | ---------------- | ----------------------------- |
+| 0–30        | Limited Proof    | 1–2 basic verifications       |
+| 30–60       | Partial Identity | KYC + one social proof        |
+| 60–80       | Verified User    | Multiple dimensions           |
+| 80–90       | High Credibility | Strong proofs, minor gaps     |
+| 90–100      | Fully Verifiable | Complete, consistent identity |
+
+---
+
+## Examples
+
+| Connected Proofs                  | Coverage C | Approx. VRS |
+| --------------------------------- | ---------- | ----------- |
+| Twitter + Duolingo                | 0.4        | ≈ 45        |
+| Binance KYC + LinkedIn            | 0.6        | ≈ 70        |
+| Binance + OKX + LinkedIn + GitHub | 0.8        | ≈ 85        |
+| All major sources                 | 1.0        | ≈ 95–100    |
+
+---
+
+## Properties
+
+- **Bounded:** Always within [0,100]
+- **Monotonic:** New proofs never reduce score
+- **Weighted Fairness:** High-trust sources matter more
+- **Coverage Sensitivity:** Major gaps penalized harder
+- **Nonlinear Incentives:** Tunable via α
+- **Auditable:** Every layer is inspectable
+- **Extensible:** Supports decay, confidence, and federation
+
+---
+
+## How to Increase Your VRS
+
+1. Verify more **core sources**
+2. Maintain **account quality**
+3. Diversify **Web2 and Web3 proofs**
+4. Stay **consistent and active**
+
+---
+
+## Reference Implementation
+
+```python
+def compute_vrs(sources, alpha=1.5):
+    total_weight = sum(s["weight"] for s in sources)
+    provided = [s for s in sources if s["provided"]]
+    coverage = sum(s["weight"] for s in provided) / total_weight
+    quality = sum(s["weight"] * s["score"] for s in provided)
+    return round(100 * quality * (coverage ** alpha), 2)
+```
+
+#### **Open Framework & Future Extensions**
+
+The VRS framework is open for developers and projects to integrate. Future modules may include:
+
+- **Temporal Decay:** recent proofs weighted higher.
+- **Confidence Scores:** sources with cryptographic attestations weighted more.
+- **Federated Aggregation:** cross-domain proof composition without data sharing.
+
+By aligning economic incentives with verifiable identity strength, VRS lays the foundation for the **Proof Economy** - where reputation becomes a liquid, portable, and provable asset.
+
+#### **Open Access & Disclaimer**
+
+The Verifiable Reputation Score (VRS) framework is open and transparent by design. All algorithms, weight parameters, and pseudocode are publicly auditable and available for developers to reference or extend. The open-source implementation is maintained on GitHub: 👉 https://github.com/zkPassOfficial/Verifiable-Reputation-Score

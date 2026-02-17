@@ -29,8 +29,14 @@
             "group": "Getting started",
             "pages": [
               "getting-started/introduction",
-              "getting-started/Installation-guide",
-              "getting-started/overview"
+              "getting-started/Installation-guide"
+            ]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": [
+              "getting-started/overview",
+              "getting-started/vrs"
             ]
           },
           {
@@ -67,14 +73,14 @@
             ]
           },
           {
-            "group": "ZK Pass DAO",
+            "group": "Governance",
             "pages": [
               "essentials/vaap",
               "essentials/zkp"
             ]
           },
           {
-            "group": "Support",
+            "group": "Help & Legal",
             "pages": [
               "essentials/faq",
               "essentials/roadmap",
