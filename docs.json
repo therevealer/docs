@@ -75,6 +75,7 @@
           {
             "group": "Governance",
             "pages": [
+              "essentials/zk-pass-dao",
               "essentials/vaap",
               "essentials/zkp"
             ]
