@@ -85,10 +85,10 @@
         ]
       },
       {
-        "tab": "Zk Pass Use Cases",
+        "tab": "Use Cases",
         "groups": [
           {
-            "group": "Use Cases",
+            "group": "ZKPass Use Cases",
             "pages": [
               "use-cases/introduction",
               "use-cases/identity",
