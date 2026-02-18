@@ -36,7 +36,22 @@
             "group": "Core Concepts",
             "pages": [
               "getting-started/overview",
-              "getting-started/vrs"
+              "getting-started/vrs",
+              {
+                "group": "Use Cases",
+                "pages": [
+                  "use-cases/introduction",
+                  "use-cases/identity",
+                  "use-cases/finance",
+                  "use-cases/reputation",
+                  "use-cases/industries",
+                  "use-cases/ai-data",
+                  "use-cases/dePin",
+                  "use-cases/supply-chain",
+                  "use-cases/government",
+                  "use-cases/content"
+                ]
+              }
             ]
           },
           {
@@ -97,28 +112,7 @@
         ]
       },
       {
-        "tab": "Use Cases",
-        "groups": [
-          {
-            "group": "ZKPass Use Cases",
-            "pages": [
-              "use-cases/introduction",
-              "use-cases/identity",
-              "use-cases/finance",
-              "use-cases/reputation",
-              "use-cases/industries",
-              "use-cases/ai-data",
-              "use-cases/dePin",
-              "use-cases/supply-chain",
-              "use-cases/government",
-              "use-cases/content"
-            ]
-          },
-          {
-            "group": "Endpoint examples",
-            "pages": []
-          }
-        ]
+        "tab": "Use Cases"
       }
     ]
   },
