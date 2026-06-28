@@ -1,0 +1,88 @@
+---
+title: "Changelog"
+description: "Product updates and announcements."
+---
+
+<Update label="March 15, 2024">
+  ## Added job logs endpoint
+
+  You can now retrieve raw log output from any job using the new `GET /jobs/{job_id}/logs` endpoint.
+  This is particularly useful for debugging failed jobs without leaving your integration.
+
+  The endpoint supports an `offset` query parameter for incremental log fetching — useful when streaming
+  logs from a long-running job.
+
+  ```bash
+  curl https://api.pipelineci.dev/v1/jobs/job_xyz789/logs \
+    -H "X-API-Key: pci_live_xxxxxxxxxxxxxxxx"
+  ```
+
+  **Also in this release:**
+  - `GET /pipelines` now supports filtering by `branch` in addition to `status`
+  - Error responses now include a `details` field with additional context, especially on `422` responses
+  - Fixed: pipeline status now correctly returns `cancelled` instead of `failed` when manually stopped
+  - Fixed: webhook delivery retries were not firing correctly after a `503` response from the target endpoint
+</Update>
+
+<Update label="February 28, 2024">
+  ## Sandbox environment and environment updates
+
+  You can now test your integration without affecting production using the sandbox environment.
+  Use `https://sandbox.api.pipelineci.dev/v1` with a `pci_test_` API key — pipeline runs in the
+  sandbox do not trigger real deployments.
+
+  Environments can now be updated in place using the new `PATCH /environments/{environment_id}` endpoint.
+  Previously, updating an environment required deleting and recreating it.
+
+  A new `deploying` status has been added to environments. This is set automatically when a pipeline
+  targeting that environment is actively running.
+
+  **Deprecation notice:**
+  The `commit_hash` field on Pipeline responses is deprecated. Use `commit_sha` instead.
+  `commit_hash` will continue to work but will be removed in **v2.0.0**.
+
+  **Also in this release:**
+  - Artifact uploads now return a clear `413 Payload Too Large` error when the file exceeds 500MB
+  - Rate limit error responses now include `retry_after_seconds` in the `details` object
+</Update>
+
+<Update label="February 10, 2024">
+  ## Artifacts support
+
+  Pipelines can now produce and store artifacts — files generated during a run such as compiled
+  binaries, test reports, or build logs.
+
+  New endpoints:
+
+  | Method | Endpoint | Description |
+  |--------|----------|-------------|
+  | `GET` | `/pipelines/{pipeline_id}/artifacts` | List artifacts for a pipeline |
+  | `POST` | `/pipelines/{pipeline_id}/artifacts` | Upload an artifact |
+  | `GET` | `/artifacts/{artifact_id}/download` | Download an artifact |
+  | `DELETE` | `/artifacts/{artifact_id}` | Delete an artifact |
+
+  Artifacts are stored for **30 days** by default. The `expires_at` field on the Artifact object
+  shows the scheduled deletion date.
+
+  **Also in this release:**
+  - `POST /pipelines/{pipeline_id}/trigger` now accepts a `variables` object for injecting custom environment variables into a run
+  - Paginated list endpoints now return a `meta` object with `total`, `page`, and `limit` fields
+  - Fixed: `DELETE /environments/{environment_id}` was returning `200` instead of `204`
+</Update>
+
+<Update label="January 20, 2024">
+  ## v1.0.0 — Initial release
+
+  The first stable release of the PipelineCI API is here.
+
+  This release includes full support for:
+
+  - **Pipelines** — create, trigger, list, and cancel pipeline runs
+  - **Jobs** — list jobs, retrieve job details, and retry failed jobs
+  - **Environments** — create and delete deployment environments
+  - **Webhooks** — subscribe to `pipeline.*` events and receive real-time notifications
+  - **Authentication** — API key auth via the `X-API-Key` header
+  - **Structured errors** — consistent error responses with machine-readable `code` fields across all endpoints
+
+  Base URL: `https://api.pipelineci.dev/v1`
+</Update>

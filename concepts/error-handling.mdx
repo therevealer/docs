@@ -1,0 +1,171 @@
+---
+title: "Error Handling"
+description: "Understand how PipelineCI returns errors and how to handle them in your integration."
+---
+
+When something goes wrong, the PipelineCI API returns a structured error response that tells you exactly what happened and why. This page explains the error format, the status codes you may encounter, and best practices for handling them in your integration.
+
+## Error response format
+
+All errors follow the same JSON structure:
+
+```json
+{
+  "error": {
+    "code": "RESOURCE_NOT_FOUND",
+    "message": "The requested pipeline could not be found.",
+    "details": {
+      "resource": "pipeline",
+      "id": "pipe_abc123"
+    }
+  }
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `error.code` | string | A machine-readable code identifying the error type. Use this in your code to handle specific error cases. |
+| `error.message` | string | A human-readable explanation of what went wrong. |
+| `error.details` | object | Optional. Additional context about the error, such as which field failed validation. |
+
+## HTTP status codes
+
+PipelineCI uses standard HTTP status codes across all endpoints.
+
+<AccordionGroup>
+  <Accordion title="400 Bad Request">
+    The request was malformed — for example, invalid JSON in the request body.
+
+    ```json
+    {
+      "error": {
+        "code": "BAD_REQUEST",
+        "message": "The request body could not be parsed. Ensure it is valid JSON."
+      }
+    }
+    ```
+  </Accordion>
+
+  <Accordion title="401 Unauthorized">
+    Your API key is missing or invalid. Check that you are including the `X-API-Key` header with a valid key.
+
+    ```json
+    {
+      "error": {
+        "code": "UNAUTHORIZED",
+        "message": "Missing or invalid API key. Include your key in the X-API-Key header."
+      }
+    }
+    ```
+
+    See [Authentication](/concepts/authentication) for details.
+  </Accordion>
+
+  <Accordion title="403 Forbidden">
+    Your API key is valid but does not have permission to perform this action. This can happen if you are trying to modify a resource that belongs to a different account.
+
+    ```json
+    {
+      "error": {
+        "code": "FORBIDDEN",
+        "message": "You do not have permission to perform this action."
+      }
+    }
+    ```
+  </Accordion>
+
+  <Accordion title="404 Not Found">
+    The resource you requested does not exist. Double-check that the ID in your request is correct.
+
+    ```json
+    {
+      "error": {
+        "code": "RESOURCE_NOT_FOUND",
+        "message": "The requested pipeline could not be found."
+      }
+    }
+    ```
+  </Accordion>
+
+  <Accordion title="422 Validation Error">
+    The request body was valid JSON, but one or more fields failed validation. The `details` field will tell you exactly which fields are the problem.
+
+    ```json
+    {
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Request validation failed.",
+        "details": {
+          "fields": [
+            {
+              "field": "name",
+              "message": "name is required"
+            },
+            {
+              "field": "branch",
+              "message": "branch must be a string"
+            }
+          ]
+        }
+      }
+    }
+    ```
+  </Accordion>
+
+  <Accordion title="429 Too Many Requests">
+    You have exceeded the rate limit. The `details` field includes a `retry_after_seconds` value telling you how long to wait before retrying.
+
+    ```json
+    {
+      "error": {
+        "code": "RATE_LIMIT_EXCEEDED",
+        "message": "Too many requests. Please wait before retrying.",
+        "details": {
+          "retry_after_seconds": 30
+        }
+      }
+    }
+    ```
+
+    The PipelineCI API allows **1,000 requests per minute** per API key. If you need a higher limit, contact support.
+  </Accordion>
+
+  <Accordion title="500 Internal Server Error">
+    Something went wrong on PipelineCI's end. These are rare. If you encounter one consistently, check the [status page](https://status.pipelineci.dev) or contact support.
+
+    ```json
+    {
+      "error": {
+        "code": "INTERNAL_SERVER_ERROR",
+        "message": "An unexpected error occurred. Please try again later."
+      }
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Error codes reference
+
+| Code | Status | Description |
+|------|--------|-------------|
+| `BAD_REQUEST` | 400 | Malformed request body |
+| `UNAUTHORIZED` | 401 | Missing or invalid API key |
+| `FORBIDDEN` | 403 | Insufficient permissions |
+| `RESOURCE_NOT_FOUND` | 404 | Resource does not exist |
+| `VALIDATION_ERROR` | 422 | Invalid or missing request fields |
+| `RATE_LIMIT_EXCEEDED` | 429 | Too many requests |
+| `INTERNAL_SERVER_ERROR` | 500 | Unexpected server error |
+
+## Best practices for error handling
+
+**Check the `code` field, not just the status code.** The `code` gives you more granular information. For example, both a missing resource and a permission error return a `4xx` status — but the `code` tells you which one it is and how to respond.
+
+**Handle `429` errors with exponential backoff.** When you hit the rate limit, wait the number of seconds in `retry_after_seconds` before retrying. If you are making many requests in a loop, consider adding a small delay between them to avoid hitting the limit at all.
+
+**Log the full error response.** When debugging, the `details` field often contains the specific information you need. Log the entire error object, not just the message.
+
+**Don't retry `4xx` errors blindly.** A `401`, `403`, or `404` will not resolve itself on retry — these require a change to your request. Only `429` and `500` errors are worth retrying.
+
+<Tip>
+  If you receive a `500` error that you can reliably reproduce, include the request details when contacting support at support@pipelineci.dev — it helps the team identify and fix the issue faster.
+</Tip>

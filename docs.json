@@ -1,72 +1,140 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mintlify Starter Kit",
+  "name": "PipelineCI",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#6366F1",
+    "light": "#818CF8",
+    "dark": "#4338CA"
   },
   "favicon": "/favicon.svg",
   "navigation": {
-    "pages": [
+    "tabs": [
       {
-        "group": "Getting Started",
-        "pages": [
-          "index",
-          "quickstart"
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction"
+            ]
+          },
+          {
+            "group": "Concepts",
+            "pages": [
+              "concepts/what-is-cicd",
+              "concepts/core-concepts",
+              "concepts/authentication",
+              "concepts/error-handling"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Pipelines",
+            "pages": [
+              "api-reference/pipelines/list-pipelines",
+              "api-reference/pipelines/create-pipeline",
+              "api-reference/pipelines/trigger-pipeline",
+              "api-reference/pipelines/cancel-pipeline"
+            ]
+          },
+          {
+            "group": "Jobs",
+            "pages": [
+              "api-reference/jobs/list-jobs",
+              "api-reference/jobs/get-job",
+              "api-reference/jobs/retry-job",
+              "api-reference/jobs/get-job-logs"
+            ]
+          },
+          {
+            "group": "Environments",
+            "pages": [
+              "api-reference/environments/list-environments",
+              "api-reference/environments/create-environment",
+              "api-reference/environments/update-environment",
+              "api-reference/environments/delete-environment"
+            ]
+          },
+          {
+            "group": "Artifacts",
+            "pages": [
+              "api-reference/artifacts/list-artifacts",
+              "api-reference/artifacts/upload-artifact",
+              "api-reference/artifacts/download-artifact",
+              "api-reference/artifacts/delete-artifact"
+            ]
+          },
+          {
+            "group": "Webhooks",
+            "pages": [
+              "api-reference/webhooks/list-webhooks",
+              "api-reference/webhooks/create-webhook",
+              "api-reference/webhooks/update-webhook",
+              "api-reference/webhooks/delete-webhook"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Changelog",
+        "groups": [
+          {
+            "group": " ",
+            "pages": [
+              "changelog"
+            ]
+          }
         ]
       }
     ],
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "GitHub",
+          "href": "https://github.com/pipelineci",
+          "icon": "github"
         },
         {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "Status",
+          "href": "https://status.pipelineci.dev",
+          "icon": "signal"
         }
       ]
     }
   },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+  "api": {
+    "openapi": "openapi.yaml",
+    "mdx": {
+      "server": "https://api.pipelineci.dev/v1",
+      "auth": {
+        "method": "key",
+        "name": "X-API-Key"
+      }
+    }
   },
   "navbar": {
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "/"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Dashboard",
-      "href": "https://app.mintlify.com"
+      "href": "/"
     }
-  },
-  "contextual": {
-    "options": [
-      "copy",
-      "view",
-      "chatgpt",
-      "claude",
-      "perplexity",
-      "mcp",
-      "cursor",
-      "vscode"
-    ]
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "twitter": "https://twitter.com/pipelineci",
+      "github": "https://github.com/pipelineci",
+      "linkedin": "https://linkedin.com/company/pipelineci"
     }
   }
 }

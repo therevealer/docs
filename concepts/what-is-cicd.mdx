@@ -1,0 +1,73 @@
+---
+title: "What is CI/CD?"
+description: "A beginner-friendly introduction to continuous integration and continuous deployment."
+---
+If you've ever manually run tests before pushing code, or spent hours deploying an app by hand, CI/CD was built to automate exactly that.
+
+**CI/CD stands for Continuous Integration and Continuous Deployment** (sometimes Continuous Delivery). Together, they describe a set of practices that automate how your code goes from written on a developer's machine to running in production.
+
+## Continuous Integration (CI)
+
+Continuous Integration is the practice of automatically testing and validating code every time a developer pushes a change.
+
+Without CI, bugs often go undetected until they pile up. With CI, every push triggers an automated pipeline that:
+
+1. Pulls the latest code
+2. Installs dependencies
+3. Runs your test suite
+4. Reports back whether everything passed or failed
+
+This means issues are caught immediately — before they ever reach your teammates or your users.
+
+<Info>
+  Think of CI as your automated code reviewer. It runs the same checks every time, on every branch, without forgetting anything.
+</Info>
+
+## Continuous Deployment (CD)
+
+Continuous Deployment takes things a step further. Once your code passes all CI checks, it is automatically deployed to an environment — no manual steps required.
+
+The deployment can target different environments depending on the branch:
+
+| Branch | Environment |
+|--------|-------------|
+| `feature/*` | Preview environment |
+| `develop` | Staging |
+| `main` | Production |
+
+Some teams prefer **Continuous Delivery** instead — where code is automatically prepared and packaged for deployment, but a human still approves the final push to production. Both are valid approaches depending on your team's risk tolerance.
+
+## The Pipeline
+
+A **pipeline** is the sequence of automated steps that runs when code is pushed. It typically looks like this:
+
+```
+Push code → Install dependencies → Run tests → Build app → Deploy
+```
+
+Each step in the pipeline is called a **job**. If any job fails, the pipeline stops and notifies the team — preventing broken code from reaching users.
+
+## Why does this matter?
+
+CI/CD removes the slow, error-prone parts of software delivery:
+
+- No more "it works on my machine" surprises
+- No more manually running tests before every merge
+- No more late-night deployment ceremonies
+- Faster feedback loops for developers
+- More frequent, smaller, safer releases
+
+<Tip>
+  Teams that practice CI/CD deploy code significantly more often than those that don't — and with fewer failures. The automation builds confidence.
+</Tip>
+
+## What PipelineCI adds
+
+PipelineCI exposes your entire CI/CD workflow through an API. Instead of being locked into a dashboard, you can:
+
+- Trigger pipelines from your own tools and scripts
+- Build internal developer portals that show pipeline status
+- Automate rollbacks when a deployment fails
+- Integrate CI/CD events into Slack, monitoring tools, or incident systems via webhooks
+
+Ready to dive deeper? Read about the [core concepts](/concepts/core-concepts) that make up a PipelineCI workflow.

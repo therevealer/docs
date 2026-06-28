@@ -1,0 +1,129 @@
+---
+title: "Core Concepts"
+description: "Understand the building blocks of PipelineCI - pipelines, jobs, environments, artifacts, and webhooks."
+---
+
+PipelineCI is built around five core resources. Understanding how they relate to each other will make working with the API much easier.
+
+## Pipelines
+
+A **pipeline** is the top-level resource in PipelineCI. It represents a single automated workflow — a sequence of steps that runs when triggered.
+
+Every pipeline is associated with a git branch and a target environment. When triggered, it runs through its jobs in order and reports a final status.
+
+**Pipeline statuses:**
+
+| Status | Meaning |
+|--------|---------|
+| `pending` | The pipeline has been created but not yet started |
+| `running` | The pipeline is actively executing jobs |
+| `success` | All jobs completed without errors |
+| `failed` | One or more jobs failed |
+| `cancelled` | The pipeline was manually stopped |
+
+<Info>
+  A pipeline definition and a pipeline run are the same resource in PipelineCI. When you trigger a pipeline, a new run is created from the same definition.
+</Info>
+
+## Jobs
+
+A **job** is a single unit of work within a pipeline. Each pipeline contains one or more jobs, and jobs are grouped into **stages** that run in sequence.
+
+Jobs within the same stage run in parallel. Jobs in the next stage only start once all jobs in the current stage have completed successfully.
+
+**Example pipeline stages:**
+
+```
+Stage 1: test
+  ├── Run unit tests
+  └── Run linter
+
+Stage 2: build
+  └── Build Docker image
+
+Stage 3: deploy
+  └── Deploy to production
+```
+
+**Job statuses:**
+
+| Status | Meaning |
+|--------|---------|
+| `pending` | Waiting to be picked up by a runner |
+| `running` | Currently executing |
+| `success` | Completed without errors |
+| `failed` | Exited with an error |
+| `cancelled` | Stopped before completion |
+| `skipped` | Skipped due to a condition or a previous failure |
+
+## Environments
+
+An **environment** is a deployment target — a server, cloud function, or hosting platform where your application runs.
+
+Common environments include:
+
+- **production** — the live version your users access
+- **staging** — a replica of production used for final testing
+- **preview** — short-lived environments for individual feature branches
+
+Each pipeline is associated with one environment. When a pipeline runs, it deploys your application to that environment.
+
+**Environment statuses:**
+
+| Status | Meaning |
+|--------|---------|
+| `active` | The environment is live and healthy |
+| `inactive` | The environment exists but nothing is deployed to it |
+| `deploying` | A pipeline is currently deploying to this environment |
+
+## Artifacts
+
+An **artifact** is any file produced during a pipeline run that you want to store and access later.
+
+Common artifacts include:
+
+- Compiled binaries
+- Docker images
+- Test coverage reports
+- Build logs
+
+Artifacts are attached to a specific pipeline and job. They are stored for **30 days** by default before being automatically deleted. You can download them at any time within that window, or delete them early to free up storage.
+
+<Warning>
+  Artifacts are automatically deleted after 30 days. Download or back up anything you need to keep long-term before the expiry date.
+</Warning>
+
+## Webhooks
+
+A **webhook** is an HTTP endpoint you register with PipelineCI to receive real-time event notifications.
+
+When an event you've subscribed to occurs — like a pipeline failing or a job completing — PipelineCI sends a `POST` request to your endpoint with the event details in the request body.
+
+**Available events:**
+
+| Event | Triggered when |
+|-------|---------------|
+| `pipeline.created` | A new pipeline is created |
+| `pipeline.started` | A pipeline begins running |
+| `pipeline.success` | A pipeline completes successfully |
+| `pipeline.failed` | A pipeline fails |
+| `pipeline.cancelled` | A pipeline is cancelled |
+| `job.started` | A job begins running |
+| `job.success` | A job completes successfully |
+| `job.failed` | A job fails |
+
+<Tip>
+  Webhooks are the best way to integrate PipelineCI with external tools. Use them to post failure alerts to Slack, trigger rollbacks in your infrastructure, or update a status dashboard in real time.
+</Tip>
+
+## How they fit together
+
+```
+Pipeline
+  ├── runs Jobs (grouped into stages)
+  ├── deploys to an Environment
+  ├── produces Artifacts
+  └── emits events to Webhooks
+```
+
+Every resource in the API maps back to one of these five concepts. Once you're comfortable with how they relate, navigating the API reference will feel straightforward.

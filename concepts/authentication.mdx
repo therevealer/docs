@@ -1,0 +1,98 @@
+---
+title: "Authentication"
+description: "Learn how to authenticate your requests to the PipelineCI API using API keys."
+---
+
+The PipelineCI API uses **API keys** to authenticate requests. Every request you make (except public endpoints) must include a valid API key — otherwise the API will return a `401 Unauthorized` error.
+
+## Getting your API key
+
+1. Sign in to your [PipelineCI dashboard](https://dashboard.pipelineci.dev)
+2. Navigate to **Settings → API Keys**
+3. Click **Generate new key**
+4. Copy the key immediately — it will only be shown once
+
+<Warning>
+  Store your API key somewhere safe, like a password manager or a secrets manager. You will not be able to view it again after leaving the page. If you lose it, you will need to generate a new one.
+</Warning>
+
+## Making authenticated requests
+
+Include your API key in the `X-API-Key` header of every request:
+
+```bash
+curl https://api.pipelineci.dev/v1/pipelines \
+  -H "X-API-Key: pci_live_xxxxxxxxxxxxxxxx"
+```
+
+Your API key should always be sent in the header — never as a query parameter, and never in the request body.
+
+## API key format
+
+PipelineCI API keys follow this format:
+
+```
+pci_live_xxxxxxxxxxxxxxxx   ← Production key
+pci_test_xxxxxxxxxxxxxxxx   ← Sandbox key
+```
+
+The prefix tells you which environment the key belongs to. A production key (`pci_live_`) will not work against the sandbox base URL, and vice versa.
+
+## Public endpoints
+
+A small number of endpoints do not require authentication. These are designed for use cases like public status dashboards where you want to display pipeline data without exposing your API key.
+
+Currently, the following endpoint is public:
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/pipelines` | List pipelines |
+
+All other endpoints require a valid `X-API-Key` header.
+
+## Keeping your key secure
+
+<AccordionGroup>
+  <Accordion title="Never hardcode your API key in source code">
+    Hardcoding API keys in your codebase is a common security mistake. Instead, store your key in an environment variable and read it at runtime:
+
+    ```bash
+    export PIPELINECI_API_KEY=pci_live_xxxxxxxxxxxxxxxx
+    ```
+
+    ```javascript
+    const apiKey = process.env.PIPELINECI_API_KEY;
+    ```
+  </Accordion>
+
+  <Accordion title="Use different keys for different environments">
+    Generate a separate API key for each environment (local development, staging, production). This way, if a key is compromised, you can revoke it without affecting your other environments.
+  </Accordion>
+
+  <Accordion title="Rotate keys periodically">
+    Regularly generating new API keys and retiring old ones reduces the risk of a compromised key being used without your knowledge. You can generate and revoke keys at any time from the dashboard.
+  </Accordion>
+
+  <Accordion title="What to do if your key is exposed">
+    If you accidentally expose your API key — for example by committing it to a public repository — revoke it immediately from **Settings → API Keys** and generate a new one. Treat the old key as compromised regardless of whether you see suspicious activity.
+  </Accordion>
+</AccordionGroup>
+
+## Authentication errors
+
+If your request fails authentication, the API returns a `401 Unauthorized` response:
+
+```json
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Missing or invalid API key. Include your key in the X-API-Key header."
+  }
+}
+```
+
+Common causes:
+
+- The `X-API-Key` header is missing from the request
+- The API key has been revoked or is invalid
+- You are using a sandbox key against the production URL (or vice versa)
